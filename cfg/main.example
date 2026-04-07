@@ -1,0 +1,29 @@
+{
+  "networkAddress":"10.0.0.0",
+  "networkPrefix":24,
+  "ssh":[
+    {
+      "config":[
+        "host host",
+        "hostname 192.168.0.3",
+        "identityfile /app/cfg/id_ed25519"
+      ],
+      "fromHost":"my-host-0",
+      "fromPort":"23",
+      "toHost":"127.1",
+      "toPort":"22",
+      "host":"host"
+    },{
+      "config":[
+        "host host",
+        "hostname 192.168.0.3",
+        "identityfile /app/cfg/id_ed25519"
+      ],
+      "fromHost":"my-host-1",
+      "fromPort":"23",
+      "toHost":"127.1",
+      "toPort":"22",
+      "host":"host"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+aiofiles
+dnslib
+git+https://github.com/anliting/pyDeclare.git@ca089198551fb887cac1272c95414df174ea52ef
+inotify-simple
+pyroute2

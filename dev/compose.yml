@@ -1,0 +1,5 @@
+services:
+  app:
+    command: ./venv/bin/python -B -u -m app.app
+    volumes:
+      - ./app:/app/app

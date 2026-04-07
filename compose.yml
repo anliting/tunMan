@@ -1,0 +1,22 @@
+services:
+  app:
+    cap_add:
+      - NET_ADMIN
+    build:
+      dockerfile_inline: |
+        FROM python:3.14-alpine
+        RUN <<EOF
+          apk add --no-cache git openssh-client
+        EOF
+        WORKDIR /app
+        COPY requirements.txt requirements.txt
+        RUN <<EOF
+          python -m venv venv
+          ./venv/bin/pip install -r requirements.txt
+        EOF
+        COPY app app
+        CMD ["./venv/bin/python","-u","-m","app.app"]
+    image: tunman
+    network_mode: host
+    volumes:
+      - ./cfg:/app/cfg
