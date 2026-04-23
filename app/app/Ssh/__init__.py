@@ -1,5 +1,5 @@
-import asyncio
 import aiofiles
+import asyncio
 import declare
 @declare.scope
 def Ssh(queueRunner,taskSet,cfg):
@@ -8,21 +8,21 @@ def Ssh(queueRunner,taskSet,cfg):
       async with aiofiles.tempfile.TemporaryDirectory()as tmpDirName:
         async with aiofiles.open(f'{tmpDirName}/config','w')as f:
           await f.write('\n'.join(cfg['config']))
+        p=await asyncio.create_subprocess_exec(
+          'ssh',
+          '-F',f'{tmpDirName}/config',
+          '-L',f'{cfg['fromHost']}:{cfg['fromPort']}:{cfg['toHost']}:{cfg['toPort']}',
+          '-N',
+          '-o','ExitOnForwardFailure=yes',
+          '-o','ServerAliveCountMax=3',
+          '-o','ServerAliveInterval=15',
+          '-o','StrictHostKeyChecking=no',
+          cfg['host'],
+          stdin=asyncio.subprocess.DEVNULL,
+          stdout=asyncio.subprocess.DEVNULL,
+          stderr=asyncio.subprocess.DEVNULL,
+        )
         try:
-          p=await asyncio.create_subprocess_exec(
-            'ssh',
-            '-F',f'{tmpDirName}/config',
-            '-L',f'{cfg['fromHost']}:{cfg['fromPort']}:{cfg['toHost']}:{cfg['toPort']}',
-            '-N',
-            '-o','ExitOnForwardFailure=yes',
-            '-o','ServerAliveCountMax=3',
-            '-o','ServerAliveInterval=15',
-            '-o','StrictHostKeyChecking=no',
-            cfg['host'],
-            stdin=asyncio.subprocess.DEVNULL,
-            stdout=asyncio.subprocess.DEVNULL,
-            stderr=asyncio.subprocess.DEVNULL,
-          )
           await p.wait()
         finally:
           if p.returncode is None:
