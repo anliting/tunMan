@@ -18,7 +18,7 @@ def Ssh(queueRunner,taskSet,cfg):
             '-o','ServerAliveCountMax=3',
             '-o','ServerAliveInterval=15',
             '-o','StrictHostKeyChecking=no',
-            'host',
+            cfg['host'],
             stdin=asyncio.subprocess.DEVNULL,
             stdout=asyncio.subprocess.DEVNULL,
             stderr=asyncio.subprocess.DEVNULL,
