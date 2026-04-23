@@ -69,8 +69,14 @@ def App(queueRunner,taskSet):
     if k=='fromHost'
   )
   networkAddress=int(ipaddress.IPv4Address(cfgMain['networkAddress']))
-  for hostname in set(hostnameIpa.val.keys())-hostnameSet:
-    del hostnameIpa.val[hostname]
+  for hostname in[*hostnameIpa.val]:
+    if(
+        hostnameIpa.val[hostname]>>32-cfgMain['networkPrefix']!=
+        networkAddress>>32-cfgMain['networkPrefix']
+      or
+        hostname not in hostnameSet
+    ):
+      del hostnameIpa.val[hostname]
   for hostname in hostnameSet-set(hostnameIpa.val.keys()):
     for ipa in range(
       networkAddress+2,
