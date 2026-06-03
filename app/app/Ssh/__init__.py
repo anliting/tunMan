@@ -8,6 +8,8 @@ def Ssh(queueRunner,taskSet,cfg):
       async with aiofiles.tempfile.TemporaryDirectory()as tmpDirName:
         async with aiofiles.open(f'{tmpDirName}/config','w')as f:
           await f.write('\n'.join(cfg['config']))
+        print(f'{tmpDirName} connect {cfg['fromHost']}:{cfg['fromPort']}:{cfg['toHost']}:{cfg['toPort']}')
+        print(f'{tmpDirName} exec')
         p=await asyncio.create_subprocess_exec(
           'ssh',
           '-F',f'{tmpDirName}/config',
@@ -23,7 +25,11 @@ def Ssh(queueRunner,taskSet,cfg):
           stderr=asyncio.subprocess.DEVNULL,
         )
         try:
+          print(f'{tmpDirName} wait')
           await p.wait()
+        except Exception as e:
+          print(f'{tmpDirName} exc')
+          raise
         finally:
           if p.returncode is None:
             p.terminate()
