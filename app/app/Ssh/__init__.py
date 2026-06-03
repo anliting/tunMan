@@ -9,7 +9,6 @@ def Ssh(queueRunner,taskSet,cfg):
         async with aiofiles.open(f'{tmpDirName}/config','w')as f:
           await f.write('\n'.join(cfg['config']))
         print(f'{tmpDirName} connect {cfg['fromHost']}:{cfg['fromPort']}:{cfg['toHost']}:{cfg['toPort']}')
-        print(f'{tmpDirName} exec')
         p=await asyncio.create_subprocess_exec(
           'ssh',
           '-F',f'{tmpDirName}/config',
@@ -24,6 +23,7 @@ def Ssh(queueRunner,taskSet,cfg):
           stdout=asyncio.subprocess.DEVNULL,
           stderr=asyncio.subprocess.DEVNULL,
         )
+        print(f'{tmpDirName} {p.pid=}')
         try:
           print(f'{tmpDirName} wait')
           await p.wait()
